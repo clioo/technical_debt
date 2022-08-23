@@ -1,0 +1,16 @@
+version: '3.7'
+services:
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: python main.py
+    tty: true
+    stdin_open: true
+    volumes:
+      - ./.env:/app/.env
+      - ./app:/app/:cached
+      - ./.flake8:/app/.flake8
+    ports: 
+      - "8888:8888"

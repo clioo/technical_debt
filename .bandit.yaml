@@ -1,0 +1,22 @@
+# Bandit tests that we want to enforce in pre-commit:
+#B112(try_except_continue): Test for a continue in the except block
+#B110(try_except_pass): Test for a pass in the except block
+tests: ["B112", "B110"]
+
+# Skipped Tests:
+#B101: Test for use of assert
+#B105: Test for use of hard-coded password strings (Sonarqube rule works best)
+#B106: Test for use of hard-coded password function arguments (Sonarqube rule works best)
+#B303 (md5): Use of insecure MD2, MD4, MD5, or SHA1 hash function. (Sometimes needed for insecure hashing)
+#B307 (eval): Use of possibly insecure function - consider using safer ast.literal_eval. (Sonarqube rule works best)
+#B308: Use of mark_safe() may expose cross-site scripting vulnerabilities and should be reviewed (Should be removed ASAP)
+#B311: Standard pseudo-random generators are not suitable for security/cryptographic purposes. (Sonarqube rule works best)
+skips: ["B101","B105","B106","B303","B307","B308","B311"]
+
+exclude: ["/test/","/tests/","/test.py","/tests.py","*/adtrack/googleads_geotargets.py"]
+
+try_except_continue:
+    check_typed_exception: False
+
+try_except_pass:
+    check_typed_exception: False

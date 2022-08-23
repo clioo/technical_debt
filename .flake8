@@ -1,0 +1,7 @@
+[flake8]
+ignore = E203, E266, E501, W503, E800, CFQ002
+max-line-length = 79
+max-complexity = 18
+max-cognitive-complexity = 8
+select = B,C,E,F,W,T4,B9
+exclude = /usr/local/lib/*
