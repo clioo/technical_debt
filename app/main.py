@@ -5,6 +5,7 @@ from fastapi.responses import JSONResponse
 
 import uvicorn
 from api.api_v1.bad.bad_service import bad_router
+from api.api_v1.good.good_service import good_router
 from core import config
 from db.session import create_db_connection
 from sqlalchemy.exc import DBAPIError
@@ -16,16 +17,11 @@ from utils.warnings import add_warning
 settings = config.get_settings()
 
 
-app = FastAPI(
-    title=settings.app_name, docs_url="/api/docs", openapi_url="/api"
-)
+app = FastAPI(title=settings.app_name, docs_url="/api/docs", openapi_url="/api")
 
 
 @app.exception_handler(RequestValidationError)
-async def validation_exception_handler(
-    req: Request,
-    exc: RequestValidationError
-):
+async def validation_exception_handler(req: Request, exc: RequestValidationError):
     """Handles validation errors, you can customize your needs"""
     pydantic_errors = exc.errors()
     content_response = {
@@ -43,11 +39,7 @@ async def catch_exceptions_middleware(request: Request, call_next):
         return await call_next(request)
     except Exception as ex:
         # you probably want some kind of logging here
-        error_code, message = obtain_error_code_from_exception(ex)
-        return JSONResponse(
-            {"error_code": error_code, 'message': message},
-            status_code=status.HTTP_400_BAD_REQUEST
-        )
+        raise ex
 
 
 @app.get("/healthcheck")
@@ -57,7 +49,7 @@ async def healthcheck():
 
 @app.get("/warning-log-example")
 @warnings_decorator
-@logcemex(prefix='test-prefix', database='landing')
+@logcemex(prefix="test-prefix", database="landing")
 async def warning_log_example(request: Request):
     add_warning("Test warning!!!")
     return JSONResponse({"message": "OK!"}, status_code=status.HTTP_200_OK)
@@ -92,7 +84,8 @@ def obtain_database_healthcheck(database_name: str):
 
 
 # Routers
-app.include_router(service1_router, tags=["your_router_tag"])
+app.include_router(bad_router, tags=["bad_router"])
+app.include_router(good_router, tags=["good_router"])
 
 
 # Catching not caught exceptions with a middleware
