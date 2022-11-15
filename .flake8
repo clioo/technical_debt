@@ -4,4 +4,4 @@ max-line-length = 79
 max-complexity = 18
 max-cognitive-complexity = 8
 select = B,C,E,F,W,T4,B9
-exclude = /usr/local/lib/*
+exclude = /usr/local/lib/*,venv/*
